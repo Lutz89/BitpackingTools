@@ -35,6 +35,7 @@ namespace emotitron.Compression
 	{
 		#region Primary Write Packed
 
+# if BITPACK_UNSAFE
 		/// <summary>
 		/// EXPERIMENTAL: Primary UNSAFE WritePacked Method.
 		/// </summary>
@@ -51,6 +52,7 @@ namespace emotitron.Compression
 
 			//UnityEngine.Debug.Log("Write Unsafe PBits " + value + " = " + sizebits + " : " + valuebits);
 		}
+#endif
 
 		/// <summary>
 		/// EXPERIMENTAL: Primary WritePacked Method
@@ -101,8 +103,8 @@ namespace emotitron.Compression
 
 		#endregion
 
-		#region Primary Read Packed
-
+#region Primary Read Packed
+#if BITPACK_UNSAFE
 		/// <summary>
 		/// Primary UNSAFE Reader for PackedBits.
 		/// </summary>
@@ -116,7 +118,7 @@ namespace emotitron.Compression
 			//UnityEngine.Debug.Log("Read Packedunsafe sizer/value : " + sizebits + " : " + valuebits);
 			return ArraySerializeUnsafe.Read(uPtr, ref bitposition, valuebits);
 		}
-
+#endif
 		/// <summary>
 		/// Primary Reader for PackedBits.
 		/// </summary>
@@ -163,12 +165,11 @@ namespace emotitron.Compression
 			return value;
 		}
 
-		#endregion
+#endregion
 
-		#region Packed Signed
+#region Packed Signed
 
-		// Unsafe
-
+#if BITPACK_UNSAFE
 		/// <summary>
 		/// EXPERIMENTAL: Primary UNSAFE Write packed signed value. ZigZag is employed to move the sign to the rightmost position.
 		/// Packed values work best for serializing fields that have a large possible range, but are mostly hover closer to zero in value.
@@ -189,6 +190,7 @@ namespace emotitron.Compression
 			int zagzig = (int)((value >> 1) ^ (-(int)(value & 1)));
 			return zagzig;
 		}
+#endif
 		// ulong[]
 
 		/// <summary>
@@ -277,7 +279,7 @@ namespace emotitron.Compression
 			return zag;
 		}
 
-		#endregion
+#endregion
 	}
 }
 

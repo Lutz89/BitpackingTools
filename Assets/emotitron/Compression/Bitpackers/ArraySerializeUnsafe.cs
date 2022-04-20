@@ -30,16 +30,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if BITPACK_UNSAFE
 namespace emotitron.Compression
 {
-
 	public static class ArraySerializeUnsafe
 	{
 		private const string bufferOverrunMsg = "Byte buffer overrun. Dataloss will occur.";
 
-		#region Read/Write Signed Value
+#region Read/Write Signed Value
 
-		
 		/// <summary>
 		/// Writes value to this unsafe buffer. Uses zigzag encoding to retain the sign value.
 		/// Existing data past this inject is preserved.
@@ -172,7 +171,7 @@ namespace emotitron.Compression
 			return zagzig;
 		}
 
-		#endregion
+#endregion
 
 		/// <summary>
 		/// Primary Append writer. Faster method for writing to byte[] or uint[] buffers. Uses unsafe to treat them as ulong[].
@@ -322,7 +321,7 @@ namespace emotitron.Compression
 			return value & mask;
 		}
 
-		#region Secondary Add
+#region Secondary Add
 
 		/// <summary>
 		/// Append this value to the unsafe uPtr array. Use for altering previous writes. Does not preserve existing data past the write.
@@ -398,9 +397,9 @@ namespace emotitron.Compression
 			Append(uPtr, (ulong)value, ref bitposition, bits);
 		}
 
-		#endregion
+#endregion
 
-		#region Secondary Inject
+#region Secondary Inject
 
 		/// <summary>
 		/// Write this value to the unsafe uPtr array. Use for altering previous writes. Preserves existing data past the write.
@@ -471,9 +470,9 @@ namespace emotitron.Compression
 			Write(uPtr, (ulong)value, ref bitposition, bits);
 		}
 
-		#endregion
+#endregion
 
-		#region Secondary Poke
+#region Secondary Poke
 
 		/// <summary>
 		/// Write this value to the unsafe uPtr array. Use for altering previous writes. Preserves existing data past the write.
@@ -551,10 +550,10 @@ namespace emotitron.Compression
 			Write(uPtr, (ulong)value, ref bitposition, bits);
 		}
 
-		#endregion
+#endregion
 
 
-		#region ReadOut UInt64[] To Array
+#region ReadOut UInt64[] To Array
 
 		/// <summary>
 		/// Primary ReadOutUnsafe method. WARNING: No bounds checking. Use with caution. Cast array pointers to ulong*.
@@ -692,9 +691,9 @@ namespace emotitron.Compression
 			targetPos += bits;
 		}
 
-		#endregion
+#endregion
 
-		#region ReadOut UInt32[] To Array
+#region ReadOut UInt32[] To Array
 
 		/// <summary>
 		/// Read the contents of one bitpacked array to another using Unsafe. This generally requires arrays to have a total byte count divisible by 8,
@@ -808,9 +807,9 @@ namespace emotitron.Compression
 			targetPos += bits;
 		}
 
-		#endregion
+#endregion
 
-		#region ReadOut UInt8[] to Array
+#region ReadOut UInt8[] to Array
 
 		/// <summary>
 		/// Read the contents of one bitpacked array to another using Unsafe. This generally requires arrays to have a total byte count divisible by 8,
@@ -924,6 +923,7 @@ namespace emotitron.Compression
 			targetPos += bits;
 		}
 
-		#endregion
+#endregion
 	}
 }
+#endif

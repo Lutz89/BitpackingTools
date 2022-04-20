@@ -35,6 +35,7 @@ namespace emotitron.Compression
 	{
 		#region Primary Write Packed
 
+#if BITPACK_UNSAFE
 		/// <summary>
 		/// EXPERIMENTAL: Primary UNSAFE Write Method.
 		/// </summary>
@@ -53,6 +54,7 @@ namespace emotitron.Compression
 			//UnityEngine.Debug.Log(value + " buff:" + buffer + "bytes " + bytes +
 			//	" = [" + (int)sizebits + " : " + (valuebytes << 3) + "]  total bits: " + ((int)sizebits + (valuebytes << 3)));
 		}
+#endif
 
 		/// <summary>
 		/// EXPERIMENTAL: Primary Write Method.
@@ -109,10 +111,11 @@ namespace emotitron.Compression
 			//	" = [" + (int)sizebits + " : " + (valuebits << 3) + "]  total bits: " + ((int)sizebits + (valuebits << 3)));
 		}
 
-		#endregion
+#endregion
 
-		#region Primary Read Packed
+#region Primary Read Packed
 
+#if BITPACK_UNSAFE
 		/// <summary>
 		/// Primary UNSAFE Reader for PackedBytes.
 		/// </summary>
@@ -126,6 +129,8 @@ namespace emotitron.Compression
 			int valuebits = (int)ArraySerializeUnsafe.Read(uPtr, ref bitposition, sizebits) << 3;
 			return ArraySerializeUnsafe.Read(uPtr, ref bitposition, valuebits);
 		}
+#endif
+
 		/// <summary>
 		/// Primary Reader for PackedBytes.
 		/// </summary>
@@ -166,11 +171,11 @@ namespace emotitron.Compression
 			return buffer.Read(ref bitposition, valuebits);
 		}
 
-		#endregion
+#endregion
 
-		#region Packed Signed
+#region Packed Signed
 
-		// Unsafe
+#if BITPACK_UNSAFE
 
 		/// <summary>
 		/// EXPERIMENTAL: Primary UNSAFE Write signed value as PackedByte. 
@@ -180,6 +185,7 @@ namespace emotitron.Compression
 			uint zigzag = (uint)((value << 1) ^ (value >> 31));
 			WritePackedBytes(uPtr, zigzag, ref bitposition, bits);
 		}
+
 		/// <summary>
 		/// EXPERIMENTAL: Primary UNSAFE Read signed value from PackedByte. 
 		/// </summary>
@@ -189,6 +195,7 @@ namespace emotitron.Compression
 			int zagzig = (int)((value >> 1) ^ (-(int)(value & 1)));
 			return zagzig;
 		}
+#endif
 
 		// ulong[]
 
@@ -268,6 +275,6 @@ namespace emotitron.Compression
 			return zag;
 		}
 
-		#endregion
+#endregion
 	}
 }
